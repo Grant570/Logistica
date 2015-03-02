@@ -16,14 +16,14 @@ namespace Logistica_Review.Controllers
 
         public ActionResult ViewReviews()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "View your reviews here.";
 
             return View();
         }
 
         public ActionResult Review()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Review your colleagues.";
 
             return View();
         }
