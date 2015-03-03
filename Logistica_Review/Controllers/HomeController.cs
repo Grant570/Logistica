@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Logistica_Review.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         public ActionResult Index()
