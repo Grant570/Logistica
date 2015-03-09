@@ -12,6 +12,7 @@ namespace Logistica_Review.Controllers
     {
         public ActionResult Index()
         {
+            
             return View();
         }
 
@@ -19,7 +20,6 @@ namespace Logistica_Review.Controllers
         public ActionResult ViewReviews()
         {
             ViewBag.Message = "View your reviews here.";
-
             return View();
         }
 

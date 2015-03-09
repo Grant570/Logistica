@@ -189,6 +189,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503030434225_InitialCreate.cs" />
+    <Compile Include="Migrations\201503030434225_InitialCreate.Designer.cs">
+      <DependentUpon>201503030434225_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503090458506_FirstName.cs" />
+    <Compile Include="Migrations\201503090458506_FirstName.Designer.cs">
+      <DependentUpon>201503090458506_FirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503090459405_LastName.cs" />
+    <Compile Include="Migrations\201503090459405_LastName.Designer.cs">
+      <DependentUpon>201503090459405_LastName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -277,6 +290,17 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201503030434225_InitialCreate.resx">
+      <DependentUpon>201503030434225_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503090458506_FirstName.resx">
+      <DependentUpon>201503090458506_FirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503090459405_LastName.resx">
+      <DependentUpon>201503090459405_LastName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
