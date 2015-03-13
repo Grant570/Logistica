@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Your projects";
+}
+
+<div>
+    <h1>@ViewBag.Title</h1>
+    <p>Click on a team member's name to view their evaluations.</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    Due Date
+                </th>
+                <th>
+                    Team Members
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.ActionLink("Project A", "EditProject", "Projects", null)
+                </td>
+                <td>
+                    4/16/2015
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("John", "Evaluations", "Projects", new { id = "John" }, null)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("Jane", "Evaluations", "Projects", new { id = "Jane" }, null)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("Jack", "Evaluations", "Projects", new { id = "Jack" }, null)</td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CreateProject", "Projects")'">New Project</button>
+</div>

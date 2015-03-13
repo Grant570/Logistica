@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Available evaluations";
+}
+
+<div>
+    <h1>@ViewBag.Title</h1>
+    <p>Click on a colleage's name to evaluate them.</p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    Due Date
+                </th>
+                <th>
+                    Team Members
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Project A
+                </td>
+                <td>
+                    4/16/2015
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("John", "Evaluation", "Reviews", new { id = "John" }, null)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("Jane", "Evaluation", "Reviews", new { id = "Jane" }, null)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@Html.ActionLink("Jack", "Evaluation", "Reviews", new { id = "Jack" }, null)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

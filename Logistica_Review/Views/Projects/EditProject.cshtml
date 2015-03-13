@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Edit Project";
+}
+<div>
+    <h1>@ViewBag.Title</h1>
+    <form>
+        <div class="form-group">
+            <label for="title">Project Title</label>
+            <input type="text" class="form-control" id="title" value="Project A">
+        </div>
+        <div class="form-group">
+            <label for="description">Project Description</label>
+            <textarea class="form-control" id="description">Description of the project.</textarea>
+        </div>
+        <div class="form-group">
+            <label for="title">Due Date</label>
+            <input type="text" class="form-control" id="title" placeholder="MM/DD/YYYY" value="4/16/2015">
+        </div>
+        <label for="description">Users</label>
+        <div id="users-group">
+            <div class="form-group">
+                <input type="text" class="form-control" id="user-0" value="John">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="user-1" value="Jane">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="user-2" value="Jack">
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="add-users-btn" onclick="addUser()">Add User</button>
+            <button type="button" class="btn btn-primary" id="remove-users-btn" onclick="removeUser()">Remove User</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Projects")'">Save Changes</button>
+        </div>
+    </form>
+</div>
+<script>
+    var c = 3
+    function addUser() {
+        document.getElementById("users-group").innerHTML +=
+            "<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\"user-" + c + "\"></div>";
+        c++;
+    }
+    function removeUser() {
+        var formGroup = document.getElementById("user-" + (c - 1)).parentElement;
+        formGroup.parentElement.removeChild(formGroup);
+        c--;
+    }
+</script>

@@ -8,16 +8,17 @@ using MvcContrib.UI.Grid;//added to implement the grid
 namespace Logistica_Review.Controllers
 {
     [RequireHttps]
-    public class HomeController : Controller
+    public class ReviewsController : Controller
     {
         public ActionResult Index()
         {
             return View();
         }
 
-
-        public ActionResult MyEvaluations()
+        public ActionResult Evaluation(string id)
         {
+            ViewData["id"] = id;
+
             return View();
         }
     }

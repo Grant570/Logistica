@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Available evaluations";
+}
+
+<div>
+    <h1>Evaluation for @ViewData["id"]</h1>
+    <p>Each question is based on a sclae of 1 to 5. 1 being the worst, 5 being the best.</p>
+    <form>
+        <label>How was this team member's communication skills?</label>
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">1
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">2
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">3
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">4
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">5
+            </label>
+        </div>
+        <label>Did this team member show initiative?</label>
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions2" id="inlineRadio1" value="option1">1
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="option2">2
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">3
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">4
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">5
+            </label>
+        </div>
+        <div class="form-group">
+            <label>Additional Comments</label>
+            <textarea class="form-control" rows="3"></textarea>
+        </div>
+        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Reviews")'">Submit</button>
+    </form>
+</div>
