@@ -17,7 +17,7 @@ namespace Logistica_Review.Controllers
 
         public ActionResult Evaluation(string id)
         {
-            ViewData["id"] = id;
+            //ViewData["id"] = id;
 
             return View();
         }
