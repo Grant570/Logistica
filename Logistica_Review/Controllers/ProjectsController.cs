@@ -28,6 +28,7 @@ namespace Logistica_Review.Controllers
             {
                 return View("Index", "Home");
             }
+            ViewData["UserName"] = User.Identity.Name;
             return View();
         }
 
