@@ -12,13 +12,19 @@ namespace Logistica_Review.Controllers
     {
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated) {
+                return View("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult Evaluation(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View("Index", "Home");
+            }
             ViewData["id"] = id;
-
             return View();
         }
     }
