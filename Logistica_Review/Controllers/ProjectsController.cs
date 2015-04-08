@@ -65,6 +65,8 @@ namespace Logistica_Review.Controllers
             string description = Request.Form["description"];
             string dueDate = Request.Form["due-date"];
             List<string> users = new List<string>();
+            List<string> questions = new List<string>();
+
             int i = 0;
             while(true) {
                 if(Request.Form["user-" + i] != null) {
@@ -77,8 +79,22 @@ namespace Logistica_Review.Controllers
                 i++;
             }
 
+            i = 0;
+            while (true)
+            {
+                if (Request.Form["question-" + i] != null)
+                {
+                    questions.Add(Request.Form["question-" + i]);
+                }
+                else
+                {
+                    break;
+                }
+                i++;
+            }
+
             DatabaseManager dbm = new DatabaseManager();
-            dbm.addProject(User.Identity.GetUserId(), name, description, dueDate, users);
+            dbm.addProject(User.Identity.GetUserId(), name, description, dueDate, users, questions);
 
             return RedirectToAction("Index");
         }

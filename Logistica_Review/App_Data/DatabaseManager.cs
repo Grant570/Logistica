@@ -57,9 +57,9 @@ namespace Logistica_Review.Database
             return projects;
         }
 
-        public void addProject(string adminId, string projectName, string projectDescription, string dueDate, List<string> users)
+        public void addProject(string adminId, string projectName, string projectDescription, string dueDate, List<string> users, List<string> questions)
         {
-
+            //Adds a project to the database.
             string usersXml = "<users>";
             foreach (string email in users)
             {
@@ -75,11 +75,18 @@ namespace Logistica_Review.Database
             }
             usersXml += "</users>";
 
-            string evaluationsXml = "<evaluations></evaluations>";
+            string questionsXml = "<questions>";
+            foreach (string question in questions)
+            {
+                questionsXml += "<question>";
+                questionsXml += question;
+                questionsXml += "</question>";
+            }
+            questionsXml += "</questions>";
 
             SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, DueDate, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + 
                                                                                                                              "', '" + adminId + "', '" + dueDate + "', '" + usersXml +
-                                                                                                                             "', '" + evaluationsXml + "')", sqlCon);
+                                                                                                                             "', '" + questionsXml + "')", sqlCon);
             command.ExecuteNonQuery();
         }
 
@@ -133,7 +140,7 @@ namespace Logistica_Review.Database
             //Gets list of reviews about the user.
         }
 
-        public void submittReview(int reviewId, List<String> Answers)
+        public void submitReview(int reviewId, List<String> Answers)
         {
             //Submits data pertaining to a review.
         }

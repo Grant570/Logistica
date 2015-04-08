@@ -16,12 +16,20 @@
             <label for="title">Due Date</label>
             <input type="text" class="form-control" id="due-date" name="due-date" placeholder="MM/DD/YYYY">
         </div>
-        <label for="description">Users</label>
+        <label for="users-group">Users</label>
         <div id="users-group">
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-primary" id="add-users-btn" onclick="addUser()">Add User</button>
             <button type="button" class="btn btn-primary" id="remove-users-btn" onclick="removeUser()">Remove User</button>
+        </div>
+        <br />
+        <label for="questions-group">Evaluation Questions</label>
+        <div id="questions-group">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="add-questions-btn" onclick="addQuestion()">Add Question</button>
+            <button type="button" class="btn btn-primary" id="remove-questions-btn" onclick="removeQuestion()">Remove Question</button>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-default">Submit</button>
@@ -39,5 +47,17 @@
         var formGroup = document.getElementById("user-" + (c - 1)).parentElement;
         formGroup.parentElement.removeChild(formGroup);
         c--;
+    }
+
+    var n = 0;
+    function addQuestion() {
+        document.getElementById("questions-group").innerHTML +=
+            "<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\"question-" + n + "\" name=\"question-" + n + "\"></div>";
+        n++;
+    }
+    function removeQuestion() {
+        var formGroup = document.getElementById("question-" + (n - 1)).parentElement;
+        formGroup.parentElement.removeChild(formGroup);
+        n--;
     }
 </script>
