@@ -39,6 +39,7 @@ namespace Logistica_Review.Database
                 project.ID = Convert.ToInt32(row.ItemArray[0]);
                 project.Name = row.ItemArray[1].ToString();
                 project.Description = row.ItemArray[2].ToString();
+                project.DueDate = row.ItemArray[6].ToString();
 
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(row.ItemArray[4].ToString());
@@ -56,13 +57,13 @@ namespace Logistica_Review.Database
             return projects;
         }
 
-        public void addProject(string adminId, string projectName, string projectDescription, List<string> userIds)
+        public void addProject(string adminId, string projectName, string projectDescription, string dueDate, List<string> users)
         {
 
             string usersXml = "<users>";
-            foreach (string id in userIds)
+            foreach (string email in users)
             {
-                DataTable dataTable = executeQuery("SELECT * FROM AspNetUsers WHERE ID='" + id + "'", "AspNetUsers").Tables["AspNetUsers"];
+                DataTable dataTable = executeQuery("SELECT * FROM AspNetUsers WHERE Email='" + email + "'", "AspNetUsers").Tables["AspNetUsers"];
                 foreach (DataRow row in dataTable.Rows)
                 {
                     usersXml += "<user>";
@@ -76,8 +77,8 @@ namespace Logistica_Review.Database
 
             string evaluationsXml = "<evaluations></evaluations>";
 
-            SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + 
-                                                                                                                             "', '" + adminId + "', '" + usersXml +
+            SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, DueDate, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + 
+                                                                                                                             "', '" + adminId + "', '" + dueDate + "', '" + usersXml +
                                                                                                                              "', '" + evaluationsXml + "')", sqlCon);
             command.ExecuteNonQuery();
         }
@@ -96,6 +97,7 @@ namespace Logistica_Review.Database
                     project.ID = Convert.ToInt32(row.ItemArray[0]);
                     project.Name = row.ItemArray[1].ToString();
                     project.Description = row.ItemArray[2].ToString();
+                    project.DueDate = row.ItemArray[6].ToString();
 
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.LoadXml(row.ItemArray[4].ToString());

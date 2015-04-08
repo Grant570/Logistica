@@ -13,6 +13,7 @@ namespace Logistica_Review.Models
         public string Admin { get; set; }
         public List<UserModel> Users { get; set; }
         public List<EvaluationModel> Evaluations { get; set; }
+        public string DueDate { get; set; }
 
         public ProjectModel()
         {

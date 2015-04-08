@@ -3,18 +3,18 @@
 }
 <div>
     <h1>@ViewBag.Title</h1>
-    <form>
+    <form action="AddProject" method="post">
         <div class="form-group">
             <label for="title">Project Title</label>
-            <input type="text" class="form-control" id="title">
+            <input type="text" class="form-control" id="title" name="title">
         </div>
         <div class="form-group">
             <label for="description">Project Description</label>
-            <textarea class="form-control" id="description"></textarea>
+            <textarea class="form-control" id="description" name="description"></textarea>
         </div>
         <div class="form-group">
             <label for="title">Due Date</label>
-            <input type="text" class="form-control" id="title" placeholder="MM/DD/YYYY">
+            <input type="text" class="form-control" id="due-date" name="due-date" placeholder="MM/DD/YYYY">
         </div>
         <label for="description">Users</label>
         <div id="users-group">
@@ -24,7 +24,7 @@
             <button type="button" class="btn btn-primary" id="remove-users-btn" onclick="removeUser()">Remove User</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Projects")'">Submit</button>
+            <button type="submit" class="btn btn-default">Submit</button>
         </div>
     </form>
 </div>
@@ -32,7 +32,7 @@
     var c = 0;
     function addUser() {
         document.getElementById("users-group").innerHTML +=
-            "<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\"user-" + c + "\"></div>";
+            "<div class=\"form-group\"><input type=\"text\" class=\"form-control\" id=\"user-" + c + "\" name=\"user-" + c + "\"></div>";
         c++;
     }
     function removeUser() {

@@ -36,7 +36,6 @@ namespace Logistica_Review.Controllers
             DatabaseManager dbm = new DatabaseManager();
 
             List<ProjectModel> projects = dbm.getManagingProjects(User.Identity.GetUserId());
-            ViewData["UserName"] = User.Identity.Name;
             return View(projects);
         }
 
@@ -57,6 +56,31 @@ namespace Logistica_Review.Controllers
                 return View("Index", "Home");
             }
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddProject()
+        {
+            string name = Request.Form["title"];
+            string description = Request.Form["description"];
+            string dueDate = Request.Form["due-date"];
+            List<string> users = new List<string>();
+            int i = 0;
+            while(true) {
+                if(Request.Form["user-" + i] != null) {
+                    users.Add(Request.Form["user-" + i]);
+                }
+                else
+                {
+                    break;
+                }
+                i++;
+            }
+
+            DatabaseManager dbm = new DatabaseManager();
+            dbm.addProject(User.Identity.GetUserId(), name, description, dueDate, users);
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult EditProject()
