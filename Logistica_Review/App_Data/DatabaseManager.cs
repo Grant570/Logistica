@@ -1,35 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-using Logistica_Review.Classes;
+using Logistica_Review.Models;
 
 namespace Logistica_Review.Database
 {
     public class DatabaseManager
     {
+        /*
+         * Responsible for all calls to the database.
+        */
         private SqlConnection sqlCon;
 
         public DatabaseManager() {
-            SqlConnection sqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-            sqlCon.Open();
+            this.sqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            this.sqlCon.Open();
         }
 
-        public List<Project> getProjects(long userId) {
+        public DataSet executeQuery(string query, string table)
+        {
             DataSet dataSet = new DataSet();
-            SqlDataAdapter sqlAdapter = new SqlDataAdapter("SELECT * FROM Projects", sqlCon);
-            sqlAdapter.Fill(dataSet, "Projects");
-            DataTable table = dataSet.Tables["Projects"];
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter(query, sqlCon);
+            sqlAdapter.Fill(dataSet, table);
 
-            List<Project> projects = new List<Project>();
+            return dataSet;
+        }
+
+        public List<ProjectModel> getManagingProjects(string adminId) {
+            //Returns a list of projects the user is currently managing.
+            DataTable table = executeQuery("SELECT * FROM Projects WHERE Admin='" + adminId + "'", "Projects").Tables["Projects"];
+
+            List<ProjectModel> projects = new List<ProjectModel>();
             foreach(DataRow row in table.Rows) {
-                Project project = new Project();
-                project.Id = Convert.ToInt32(row.ItemArray[0]);
+                ProjectModel project = new ProjectModel();
+                project.ID = Convert.ToInt32(row.ItemArray[0]);
                 project.Name = row.ItemArray[1].ToString();
-            }
+                project.Description = row.ItemArray[2].ToString();
 
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(row.ItemArray[4].ToString());
+                XmlNode node = xmlDoc.FirstChild;
+                foreach (XmlNode userNode in node.SelectNodes("user"))
+                {
+                    UserModel user = new UserModel();
+                    user.ID = userNode.SelectSingleNode("ID").InnerText;
+                    user.FirstName = userNode.SelectSingleNode("FirstName").InnerText;
+                    user.LastName = userNode.SelectSingleNode("LastName").InnerText;
+                    project.Users.Add(user);
+                }
+                projects.Add(project);
+            }
             return projects;
+        }
+
+        public List<ProjectModel> getAssignedProjects(string userId)
+        {
+            //Get projects the user is currently assigned to.
+            DataTable table = executeQuery("SELECT * FROM Projects", "Projects").Tables["Projects"];
+
+            List<ProjectModel> projects = new List<ProjectModel>();
+            foreach (DataRow row in table.Rows)
+            {
+                if (row.ItemArray[4].ToString().Contains(userId))
+                {
+                    ProjectModel project = new ProjectModel();
+                    project.ID = Convert.ToInt32(row.ItemArray[0]);
+                    project.Name = row.ItemArray[1].ToString();
+                    project.Description = row.ItemArray[2].ToString();
+
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(row.ItemArray[4].ToString());
+                    XmlNode node = xmlDoc.FirstChild;
+                    foreach (XmlNode userNode in node.SelectNodes("user"))
+                    {
+                        UserModel user = new UserModel();
+                        user.ID = userNode.SelectSingleNode("ID").InnerText;
+                        if(user.ID != userId) {
+                            user.FirstName = userNode.SelectSingleNode("FirstName").InnerText;
+                            user.LastName = userNode.SelectSingleNode("LastName").InnerText;
+                            project.Users.Add(user);
+                        }
+                    }
+
+                    projects.Add(project);
+                }
+            }
+            return projects;
+        }
+
+        public void addUser(string userEmail, int projectId) {
+            //Adds the specified user to a project.
+        }
+
+        public void removeUser(string userEmail, int projectId)
+        {
+            //Removes the specified user from a project.
+        }
+
+        public void getReviews(int userId)
+        {
+            //Gets list of reviews about the user.
+        }
+
+        public void submittReview(int reviewId, List<String> Answers)
+        {
+            //Submits data pertaining to a review.
         }
     }
 }

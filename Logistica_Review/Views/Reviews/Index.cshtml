@@ -21,30 +21,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    Project A
-                </td>
-                <td>
-                    4/16/2015
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("John", "Evaluation", "Reviews", new { id = "John" }, null)</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("Jane", "Evaluation", "Reviews", new { id = "Jane" }, null)</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("Jack", "Evaluation", "Reviews", new { id = "Jack" }, null)</td>
-            </tr>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>
+                        @project.Name
+                    </td>
+                    <td>
+                        4/16/2015
+                    </td>
+                    <td></td>
+                </tr>
+                foreach (var user in project.Users)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>@Html.ActionLink((string)user.FirstName + " " + (string)user.LastName, "Evaluation", "Reviews", new { id = (string)user.FirstName + " " + (string)user.LastName }, null)</td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 </div>
