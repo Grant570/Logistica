@@ -192,6 +192,27 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504072221590_InitialCreate.cs" />
+    <Compile Include="Migrations\201504072221590_InitialCreate.Designer.cs">
+      <DependentUpon>201504072221590_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504080251149_FirstName.cs" />
+    <Compile Include="Migrations\201504080251149_FirstName.Designer.cs">
+      <DependentUpon>201504080251149_FirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504080251578_LastName.cs" />
+    <Compile Include="Migrations\201504080251578_LastName.Designer.cs">
+      <DependentUpon>201504080251578_LastName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504080300234_FirstName1.cs" />
+    <Compile Include="Migrations\201504080300234_FirstName1.Designer.cs">
+      <DependentUpon>201504080300234_FirstName1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504080300444_LastName1.cs" />
+    <Compile Include="Migrations\201504080300444_LastName1.Designer.cs">
+      <DependentUpon>201504080300444_LastName1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\EvaluationModel.cs" />
@@ -285,7 +306,23 @@
     <Content Include="Views\Projects\AddUser.cshtml" />
     <Content Include="Views\Projects\EditProject.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201504072221590_InitialCreate.resx">
+      <DependentUpon>201504072221590_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504080251149_FirstName.resx">
+      <DependentUpon>201504080251149_FirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504080251578_LastName.resx">
+      <DependentUpon>201504080251578_LastName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504080300234_FirstName1.resx">
+      <DependentUpon>201504080300234_FirstName1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504080300444_LastName1.resx">
+      <DependentUpon>201504080300444_LastName1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>

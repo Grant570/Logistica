@@ -56,6 +56,32 @@ namespace Logistica_Review.Database
             return projects;
         }
 
+        public void addProject(string adminId, string projectName, string projectDescription, List<string> userIds)
+        {
+
+            string usersXml = "<users>";
+            foreach (string id in userIds)
+            {
+                DataTable dataTable = executeQuery("SELECT * FROM AspNetUsers WHERE ID='" + id + "'", "AspNetUsers").Tables["AspNetUsers"];
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    usersXml += "<user>";
+                    usersXml += "<ID>" + row.ItemArray[0].ToString() + "</ID>";
+                    usersXml += "<FirstName>" + row.ItemArray[12].ToString() + "</FirstName>";
+                    usersXml += "<LastName>" + row.ItemArray[13].ToString() + "</LastName>";
+                    usersXml += "</user>";
+                }
+            }
+            usersXml += "</users>";
+
+            string evaluationsXml = "<evaluations></evaluations>";
+
+            SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + 
+                                                                                                                             "', '" + adminId + "', '" + usersXml +
+                                                                                                                             "', '" + evaluationsXml + "')", sqlCon);
+            command.ExecuteNonQuery();
+        }
+
         public List<ProjectModel> getAssignedProjects(string userId)
         {
             //Get projects the user is currently assigned to.
