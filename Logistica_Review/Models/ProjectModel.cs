@@ -10,8 +10,16 @@ namespace Logistica_Review.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public UserModel Admin { get; set; }
-        public ICollection<UserModel> Users { get; set; }
-        public ICollection<EvaluationModel> Evaluations { get; set; }
+        public string Admin { get; set; }
+        public List<UserModel> Users { get; set; }
+        public List<EvaluationModel> Evaluations { get; set; }
+        public string DueDate { get; set; }
+
+        public ProjectModel()
+        {
+            Users = new List<UserModel>();
+            Evaluations = new List<EvaluationModel>();
+        }
     }
+
 }

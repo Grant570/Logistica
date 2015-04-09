@@ -21,30 +21,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    @Html.ActionLink("Project A", "EditProject", "Projects", null)
-                </td>
-                <td>
-                    4/16/2015
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("John", "Evaluations", "Projects", new { id = "John" }, null)</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("Jane", "Evaluations", "Projects", new { id = "Jane" }, null)</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>@Html.ActionLink("Jack", "Evaluations", "Projects", new { id = "Jack" }, null)</td>
-            </tr>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink((string)project.Name, "EditProject", "Projects", null)
+                    </td>
+                    <td>
+                        @project.DueDate
+                    </td>
+                    <td></td>
+                </tr>
+                foreach (var user in project.Users)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>@Html.ActionLink((string)user.FirstName + " " + (string)user.LastName, "Evaluations", "Projects", new { id = (string)user.FirstName + " " + (string)user.LastName }, null)</td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CreateProject", "Projects")'">New Project</button>
