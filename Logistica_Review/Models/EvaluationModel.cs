@@ -8,10 +8,21 @@ namespace Logistica_Review.Models
     public class EvaluationModel
     {
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public ProjectModel Project { get; set; }
-        public ICollection<string> Questions { get; set; }
-        public ICollection<int> Answers { get; set; }
+        public int ProjectID { get; set; }
+        public string ProjectName { get; set; }
+        public List<string> Questions { get; set; }
+        public List<string> Answers { get; set; }
+        public string ForUserID { get; set; }
+        public string ForUserName { get; set; }
+        public string SubmittedByID { get; set; }
+        public string SubmittedByName { get; set; }
+        public string AdditionalComments { get; set; }
+        public bool Submitted { get; set; }
+
+        public EvaluationModel()
+        {
+            Questions = new List<string>();
+            Answers = new List<string>();
+        }
     }
 }

@@ -2,52 +2,47 @@
     ViewBag.Title = "Projects";
 }
 
-<h1>Evaluations for @ViewData["id"]</h1>
-<h3>Project X <small>Due: 4/16/2015</small></h3>
-<div class="row">
-    <div class="col-lg-10 col-lg-offset-1">
-        <p class="lead">Evaluation from Jane</p>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Question</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>How is this team member's communication skills?</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>Did this team member show initiative?</td>
-                    <td>4</td>
-                </tr>
-            </tbody>
-        </table>
+<h1>Evaluations for @ViewBag.UserName</h1>
+<h3>@ViewBag.ProjectName <small>Due:@ViewBag.ProjectDueDate</small></h3>
+@foreach (var evaluation in Model)
+{
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            
+                <div class="col-lg-8">
+                    <p class="lead">Evaluation from @evaluation.SubmittedByName</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="alert alert-danger">Evaluation has not been submitted.</div>
+                </div>
+       
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < evaluation.Questions.Count; i++)
+                {
+                        <tr>
+                            <td>@evaluation.Questions[i]</td>
+                            @try
+                        {
+                                <td>@evaluation.Answers[i]</td>
+                        }
+                        catch
+                        {
+                            <td></td>
+                        }
+                        </tr>
+                }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-10 col-lg-offset-1">
-        <p class="lead">Evaluation from Jack</p>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Question</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>How is this team member's communication skills?</td>
-                    <td>3</td>
-                </tr>
-                <tr>
-                    <td>Did this team member show initiative?</td>
-                    <td>2</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+}
+
 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Projects")'">Back</button>

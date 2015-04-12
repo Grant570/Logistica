@@ -20,17 +20,19 @@ namespace Logistica_Review.Controllers
             }
             DatabaseManager dbm = new DatabaseManager();
             List<ProjectModel> projects = dbm.getAssignedProjects(User.Identity.GetUserId());
+            ViewBag.UserId = User.Identity.GetUserId();
             return View(projects);
         }
 
-        public ActionResult Evaluation(string id)
+        public ActionResult Evaluation(int projectId, string forUser, string submittedBy)
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return View("Index", "Home");
             }
-            ViewData["id"] = id;
-            return View();
+            DatabaseManager dbm = new DatabaseManager();
+            EvaluationModel evaluation = dbm.getEvaluation(projectId, forUser, submittedBy);
+            return View(evaluation);
         }
     }
 }

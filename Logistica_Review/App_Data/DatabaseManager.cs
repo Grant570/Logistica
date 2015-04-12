@@ -60,6 +60,7 @@ namespace Logistica_Review.Database
         public void addProject(string adminId, string projectName, string projectDescription, string dueDate, List<string> users, List<string> questions)
         {
             //Adds a project to the database.
+            List<string> userIds = new List<string>();
             string usersXml = "<users>";
             foreach (string email in users)
             {
@@ -71,6 +72,7 @@ namespace Logistica_Review.Database
                     usersXml += "<FirstName>" + row.ItemArray[12].ToString() + "</FirstName>";
                     usersXml += "<LastName>" + row.ItemArray[13].ToString() + "</LastName>";
                     usersXml += "</user>";
+                    userIds.Add(row.ItemArray[0].ToString());
                 }
             }
             usersXml += "</users>";
@@ -84,9 +86,28 @@ namespace Logistica_Review.Database
             }
             questionsXml += "</questions>";
 
-            SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, DueDate, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + 
-                                                                                                                             "', '" + adminId + "', '" + dueDate + "', '" + usersXml +
-                                                                                                                             "', '" + questionsXml + "')", sqlCon);
+            SqlCommand command = new SqlCommand("INSERT INTO Projects (Name, Description, Admin, DueDate, Users, Evaluations) VALUES ('" + projectName + "', '" + projectDescription + "', '" + adminId + "', '" + dueDate + "', '" + usersXml + "', '" + questionsXml + "')", sqlCon);
+            command.ExecuteNonQuery();
+
+            //Insert assciated evaluations into the database
+            string projectID = executeQuery("SELECT TOP 1 ID FROM Projects ORDER BY ID DESC", "Projects").Tables["Projects"].Rows[0].ItemArray[0].ToString();
+            string answersXml = "<answers></answers>";
+            foreach (string userA in userIds) {
+                foreach(string userB in userIds) {
+                    if(userA != userB) {
+                        command = new SqlCommand("INSERT INTO Evaluations (Project, Questions, Answers, ForUser, SubmittedBy, Submitted) VALUES ('" + projectID.ToString() + "', '" + questionsXml + "', '" + answersXml + "', '" + userA + "', '" + userB + "', '0')", sqlCon);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        public void removeProject(int projectID)
+        {
+            SqlCommand command = new SqlCommand("DELETE FROM Projects WHERE ID='" + projectID + "'", sqlCon);
+            command.ExecuteNonQuery();
+
+            command = new SqlCommand("DELETE FROM Evaluations WHERE Project='" + projectID + "'", sqlCon);
             command.ExecuteNonQuery();
         }
 
@@ -126,23 +147,141 @@ namespace Logistica_Review.Database
             return projects;
         }
 
-        public void addUser(string userEmail, int projectId) {
-            //Adds the specified user to a project.
-        }
-
-        public void removeUser(string userEmail, int projectId)
+        public List<ProjectModel> getReviews(string userId)
         {
-            //Removes the specified user from a project.
+            //Gets list of submitted reviews about the user.
+            List<ProjectModel> projects = getAssignedProjects(userId);
+            List<ProjectModel> returnProjects = new List<ProjectModel>();
+            foreach(ProjectModel project in projects) {
+                DataTable table = executeQuery("SELECT * FROM Evaluations WHERE ForUser='" + userId + "' AND Project='" + project.ID + "'", "Evaluations").Tables["Evaluations"];
+                foreach (DataRow row in table.Rows)
+                {
+                    EvaluationModel evaluation = new EvaluationModel();
+                    evaluation.ID = Convert.ToInt32(row[0]);
+                    evaluation.ProjectID = project.ID;
+                    evaluation.ProjectName = project.Name;
+                    evaluation.ForUserID = row[4].ToString();
+
+                    DataRow user = executeQuery("SELECT * FROM AspNetUsers WHERE ID='" + userId + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+                    evaluation.ForUserName = user.ItemArray[12].ToString() + " " + user.ItemArray[13].ToString();
+
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(row[2].ToString());
+                    XmlNode node = xmlDoc.FirstChild;
+                    foreach(XmlNode question in node.SelectNodes("question")) {
+                        evaluation.Questions.Add(question.InnerText);
+                    }
+
+                    xmlDoc.LoadXml(row[3].ToString());
+                    node = xmlDoc.FirstChild;
+                    foreach (XmlNode answer in node.SelectNodes("answer"))
+                    {
+                        evaluation.Answers.Add(answer.InnerText);
+                    }
+
+                    evaluation.SubmittedByID = row[5].ToString();
+                    user = executeQuery("SELECT * FROM AspNetUsers WHERE ID='" + evaluation.SubmittedByID + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+                    evaluation.SubmittedByName = user.ItemArray[12].ToString() + " " + user.ItemArray[13].ToString();
+
+                    if(row.ItemArray[6].ToString() == "True") {
+                        project.Evaluations.Add(evaluation);
+                    }
+                }
+                if(project.Evaluations.Count > 0) {
+                    returnProjects.Add(project);
+                }
+            }
+
+            return returnProjects;
         }
 
-        public void getReviews(int userId)
+        public EvaluationModel getEvaluation(int projectId, string forUser, string submittedBy) {
+            //Given the project ID and associated users, returns the right evaluation object.
+            EvaluationModel evaluation = new EvaluationModel();
+            DataRow evaluationRow = executeQuery("SELECT * FROM Evaluations WHERE Project='" + projectId + "' AND ForUser='" + forUser + "' AND SubmittedBy='" + submittedBy + "'", "Evaluations").Tables["Evaluations"].Rows[0];
+            evaluation.ID = Convert.ToInt32(evaluationRow.ItemArray[0]);
+            evaluation.ProjectID = projectId;
+            evaluation.ForUserID = forUser;
+            evaluation.SubmittedByID = submittedBy;
+
+            DataRow project = executeQuery("SELECT Name FROM Projects WHERE ID='" + projectId + "'", "Projects").Tables["Projects"].Rows[0];
+            evaluation.ProjectName =project.ItemArray[0].ToString();
+
+            DataRow user = executeQuery("SELECT FirstName, LastName FROM AspNetUsers WHERE ID='" + forUser + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+            evaluation.ForUserName = user.ItemArray[0] + " " + user.ItemArray[1];
+
+            user = executeQuery("SELECT FirstName, LastName FROM AspNetUsers WHERE ID='" + submittedBy + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+            evaluation.SubmittedByName = user.ItemArray[0] + " " + user.ItemArray[1];
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(evaluationRow[2].ToString());
+            XmlNode node = xmlDoc.FirstChild;
+            foreach(XmlNode question in node.SelectNodes("question")) {
+                evaluation.Questions.Add(question.InnerText);
+            }
+
+            xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(evaluationRow[3].ToString());
+            node = xmlDoc.FirstChild;
+            foreach (XmlNode answer in node.SelectNodes("answer"))
+            {
+                evaluation.Answers.Add(answer.InnerText);
+            }
+
+            evaluation.AdditionalComments = evaluationRow[7].ToString();
+
+            return evaluation;
+        }
+
+        public List<EvaluationModel> getEvaluationsForUser(int projectId, string userId)
         {
-            //Gets list of reviews about the user.
+            //Returns all evaluations for a user and project.
+            List<EvaluationModel> evaluations = new List<EvaluationModel>();
+            DataTable evaluationsTable = executeQuery("SELECT * FROM Evaluations WHERE Project='" + projectId + "' AND ForUser='" + userId + "'", "Evaluations").Tables["Evaluations"];
+            foreach(DataRow row in evaluationsTable.Rows) {
+                EvaluationModel evaluation = new EvaluationModel();
+                evaluation.ID = Convert.ToInt32(row[0]);
+                evaluation.ProjectID = projectId;
+                evaluation.ForUserID = userId;
+                evaluation.SubmittedByID = row[5].ToString();
+                evaluation.Submitted = row[6].ToString() == "True";
+
+                DataRow project = executeQuery("SELECT Name FROM Projects WHERE ID='" + projectId + "'", "Projects").Tables["Projects"].Rows[0];
+                evaluation.ProjectName = project.ItemArray[0].ToString();
+
+                DataRow user = executeQuery("SELECT FirstName, LastName FROM AspNetUsers WHERE ID='" + userId + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+                evaluation.ForUserName = user.ItemArray[0] + " " + user.ItemArray[1];
+
+                user = executeQuery("SELECT FirstName, LastName FROM AspNetUsers WHERE ID='" + evaluation.SubmittedByID + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
+                evaluation.SubmittedByName = user.ItemArray[0] + " " + user.ItemArray[1];
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(row[2].ToString());
+                XmlNode node = xmlDoc.FirstChild;
+                foreach (XmlNode question in node.SelectNodes("question"))
+                {
+                    evaluation.Questions.Add(question.InnerText);
+                }
+
+                xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(row[3].ToString());
+                node = xmlDoc.FirstChild;
+                foreach (XmlNode answer in node.SelectNodes("answer"))
+                {
+                    evaluation.Answers.Add(answer.InnerText);
+                }
+
+                evaluation.AdditionalComments = row[7].ToString();
+
+                evaluations.Add(evaluation);
+            }
+            return evaluations;
         }
 
-        public void submitReview(int reviewId, List<String> Answers)
+        public void submitReview(int reviewId, List<string> Answers)
         {
             //Submits data pertaining to a review.
+
         }
     }
 }

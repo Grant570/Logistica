@@ -3,48 +3,32 @@
 }
 
 <div>
-    <h1>Evaluation for @ViewData["id"]</h1>
-    <p>Each question is based on a sclae of 1 to 5. 1 being the worst, 5 being the best.</p>
+    <h1>Evaluation for @Model.ForUserName</h1>
+    <p>Each question is based on a scale of 1 to 5. 1 being the worst, 5 being the best.</p>
     <form>
-        <label>How was this team member's communication skills?</label>
-        <div class="form-group">
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">1
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">2
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">3
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">4
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">5
-            </label>
-        </div>
-        <label>Did this team member show initiative?</label>
-        <div class="form-group">
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions2" id="inlineRadio1" value="option1">1
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="option2">2
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">3
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">4
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions2" id="inlineRadio3" value="option3">5
-            </label>
-        </div>
+        @for(int i = 0; i < Model.Questions.Count; i++) {
+            <label>@Model.Questions[i]</label>
+            <div class="form-group">
+                <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" id="radio-@i-1" value="1">1
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" id="radio-@i-2" value="2">2
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" id="radio-@i-3" value="3">3
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" id="radio-@i-4" value="4">4
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" id="radio-@i-5" value="5">5
+                </label>
+            </div>
+        }
         <div class="form-group">
             <label>Additional Comments</label>
-            <textarea class="form-control" rows="3"></textarea>
+            <textarea class="form-control" name="additionalComments" id="additionalComments" rows="3"></textarea>
         </div>
         <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Reviews")'">Submit</button>
     </form>
