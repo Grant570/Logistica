@@ -119,7 +119,12 @@ namespace Logistica_Review.Database
             List<ProjectModel> projects = new List<ProjectModel>();
             foreach (DataRow row in table.Rows)
             {
-                if (row.ItemArray[4].ToString().Contains(userId))
+                int month = Convert.ToInt32(row.ItemArray[6].ToString().Substring(0, 2));
+                int day = Convert.ToInt32(row.ItemArray[6].ToString().Substring(3, 2));
+                int year = Convert.ToInt32(row.ItemArray[6].ToString().Substring(6, 4));
+                DateTime dueDate = new DateTime(year, month, day);
+                TimeSpan timespan = dueDate - DateTime.Now;
+                if (row.ItemArray[4].ToString().Contains(userId) && timespan.TotalDays > 0)
                 {
                     ProjectModel project = new ProjectModel();
                     project.ID = Convert.ToInt32(row.ItemArray[0]);
@@ -182,6 +187,7 @@ namespace Logistica_Review.Database
                     evaluation.SubmittedByID = row[5].ToString();
                     user = executeQuery("SELECT * FROM AspNetUsers WHERE ID='" + evaluation.SubmittedByID + "'", "AspNetUsers").Tables["AspNetUsers"].Rows[0];
                     evaluation.SubmittedByName = user.ItemArray[12].ToString() + " " + user.ItemArray[13].ToString();
+                    evaluation.AdditionalComments = row.ItemArray[7].ToString();
 
                     if(row.ItemArray[6].ToString() == "True") {
                         project.Evaluations.Add(evaluation);
@@ -278,10 +284,20 @@ namespace Logistica_Review.Database
             return evaluations;
         }
 
-        public void submitReview(int reviewId, List<string> Answers)
+        public void submitReview(int reviewId, List<string> Answers, string AdditionalComments)
         {
             //Submits data pertaining to a review.
+            string answersXml = "<answers>";
+            foreach (string answer in Answers)
+            {
+                answersXml += "<answer>";
+                answersXml += answer;
+                answersXml += "</answer>";
+            }
+            answersXml += "</answers>";
 
+            SqlCommand command = new SqlCommand("UPDATE Evaluations SET Answers='" + answersXml +"', AdditionalComments='" + AdditionalComments + "', Submitted='1' WHERE ID='" + reviewId + "'", sqlCon);
+            command.ExecuteNonQuery();
         }
     }
 }
