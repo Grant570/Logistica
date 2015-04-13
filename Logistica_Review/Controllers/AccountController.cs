@@ -58,7 +58,7 @@ namespace Logistica_Review.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View("Login");
         }
 
         //
@@ -139,7 +139,7 @@ namespace Logistica_Review.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return View("Register");
         }
 
         //

@@ -46,7 +46,7 @@ namespace Logistica_Review.Controllers
                 return View("Index", "Home");
             }
             ViewData["id"] = id;
-            return View();
+            return View("Evaluations");
         }
 
         public ActionResult CreateProject()
@@ -55,7 +55,7 @@ namespace Logistica_Review.Controllers
             {
                 return View("Index", "Home");
             }
-            return View();
+            return View("CreateProject");
         }
 
         [HttpPost]
@@ -105,7 +105,7 @@ namespace Logistica_Review.Controllers
             {
                 return View("Index", "Home");
             }
-            return View();
+            return View("EditProject");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Logistica_Review.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return View("Index");
         }
 
 
