@@ -28,7 +28,7 @@
                         @project.Name
                     </td>
                     <td>
-                        4/16/2015
+                        @project.DueDate
                     </td>
                     <td></td>
                 </tr>
@@ -37,7 +37,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>@Html.ActionLink((string)user.FirstName + " " + (string)user.LastName, "Evaluation", "Reviews", new { id = (string)user.FirstName + " " + (string)user.LastName }, null)</td>
+                        <td>@Html.ActionLink((string)user.FirstName + " " + (string)user.LastName, "Evaluation", "Reviews", new { projectId = (int)project.ID, forUser = (string)user.ID, submittedBy = (string)ViewBag.UserId }, null)</td>
                     </tr>
                 }
             }

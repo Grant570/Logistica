@@ -36,17 +36,22 @@ namespace Logistica_Review.Controllers
             DatabaseManager dbm = new DatabaseManager();
 
             List<ProjectModel> projects = dbm.getManagingProjects(User.Identity.GetUserId());
+            ViewBag.UserId = User.Identity.GetUserId();
             return View(projects);
         }
 
-        public ActionResult Evaluations(string id)
+        public ActionResult Evaluations(int projectId, string userId,  string userName, string projectName, string projectDueDate)
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return View("Index", "Home");
             }
-            ViewData["id"] = id;
-            return View("Evaluations");
+            DatabaseManager dbm = new DatabaseManager();
+            List<EvaluationModel> evaluations = dbm.getEvaluationsForUser(projectId, userId);
+            ViewBag.UserName = userName;
+            ViewBag.ProjectName = projectName;
+            ViewBag.ProjectDueDate = projectDueDate;
+            return View(evaluations);
         }
 
         public ActionResult CreateProject()
@@ -55,7 +60,7 @@ namespace Logistica_Review.Controllers
             {
                 return View("Index", "Home");
             }
-            return View("CreateProject");
+            return View();
         }
 
         [HttpPost]
@@ -99,13 +104,20 @@ namespace Logistica_Review.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult RemoveProject(int projectID)
+        {
+            DatabaseManager dbm = new DatabaseManager();
+            dbm.removeProject(projectID);
+            return RedirectToAction("Index");
+        }
+
         public ActionResult EditProject()
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return View("Index", "Home");
             }
-            return View("EditProject");
+            return View();
         }
     }
 }
